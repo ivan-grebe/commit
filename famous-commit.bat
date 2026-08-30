@@ -69,6 +69,13 @@ if "%CHOICE%"=="0" (
 
 set "CHOICE=%CHOICE:,= %"
 
+echo.
+set /p COMMIT_MSG=Enter commit message: 
+
+if "%COMMIT_MSG%"=="" (
+    set COMMIT_MSG=Update
+)
+
 set TEMP_DIR=%TEMP%\famous-commit-%RANDOM%
 mkdir "%TEMP_DIR%" >nul 2>&1
 
@@ -132,15 +139,7 @@ for %%i in (%CHOICE%) do (
         echo.
         echo Processing: !AUTHOR_NAME!
 
-        set FILENAME=temp_!NUM!.txt
-        echo Temporary line > "!FILENAME!"
-
-        git -c user.name="!AUTHOR_NAME!" -c user.email="!AUTHOR_EMAIL!" add "!FILENAME!"
-        git -c user.name="!AUTHOR_NAME!" -c user.email="!AUTHOR_EMAIL!" commit -m "Add temporary line"
-
-        del "!FILENAME!" >nul 2>&1
-        git -c user.name="!AUTHOR_NAME!" -c user.email="!AUTHOR_EMAIL!" add "!FILENAME!"
-        git -c user.name="!AUTHOR_NAME!" -c user.email="!AUTHOR_EMAIL!" commit -m "Remove temporary line"
+        git -c user.name="!AUTHOR_NAME!" -c user.email="!AUTHOR_EMAIL!" commit --allow-empty -m "!COMMIT_MSG!"
     )
 )
 
